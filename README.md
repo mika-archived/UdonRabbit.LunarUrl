@@ -23,8 +23,8 @@ public void OnHandleUrlInput()
   _parser.Parse(url);
 
   _parser.GetScheme(); // https
-  _parser.GetHost(); // www.;youtube.com
-  _parser.GetAbsolutePath(); // watch
+  _parser.GetHost(); // www.youtube.com
+  _parser.GetAbsolutePath(); // /watch
 
   var dict = _parser.GetQuery();
   dict.GetItem("v"); // r2jgQuOmO48

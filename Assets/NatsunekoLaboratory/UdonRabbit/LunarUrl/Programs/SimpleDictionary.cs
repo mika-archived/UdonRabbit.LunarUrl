@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*-------------------------------------------------------------------------------------------
+ * Copyright (c) Natsuneko. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for license information.
+ *------------------------------------------------------------------------------------------*/
+
+using System;
 
 using UdonSharp;
 
@@ -6,6 +11,7 @@ using UnityEngine;
 
 namespace UdonRabbit.LunarUrl
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class SimpleDictionary : UdonSharpBehaviour
     {
         private string[] _aliases;
@@ -76,6 +82,11 @@ namespace UdonRabbit.LunarUrl
         public uint GetCount()
         {
             return _count;
+        }
+
+        public string[] GetKeys()
+        {
+            return _aliases;
         }
 
         public void Clear()

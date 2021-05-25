@@ -48,7 +48,9 @@ namespace UdonRabbit.LunarUrl.Tests
                 new TestCaseData("http://user:password@[3ffe:2a00:100:7031::1]:8080/", "http:", "", 0, "/", "/", "user:password", "[3ffe:2a00:100:7031::1]", 8080).Returns(null),
                 new TestCaseData("http://222.148.142.13:61616/foo/bar?q=z", "http:", "", 1, "/foo/bar", "/foo/bar?q=z", "", "222.148.142.13", 61616).Returns(null),
                 new TestCaseData("http://mt0.google.com/vt/lyrs=m@114&hl=en&src=api&x=2&y=2&z=3&s=", "http:", "", 0, "/vt/lyrs=m@114&hl=en&src=api&x=2&y=2&z=3&s=", "/vt/lyrs=m@114&hl=en&src=api&x=2&y=2&z=3&s=", "", "mt0.google.com", 0).Returns(null),
-                new TestCaseData("http://mt0.google.com/vt/lyrs=m@114???&hl=en&src=api&x=2&y=2&z=3&s=", "http:", "", 6, "/vt/lyrs=m@114", "/vt/lyrs=m@114?hl=en&src=api&x=2&y=2&z=3&s=", "", "mt0.google.com", 0).Returns(null)
+                new TestCaseData("http://mt0.google.com/vt/lyrs=m@114???&hl=en&src=api&x=2&y=2&z=3&s=", "http:", "", 6, "/vt/lyrs=m@114", "/vt/lyrs=m@114?hl=en&src=api&x=2&y=2&z=3&s=", "", "mt0.google.com", 0).Returns(null),
+                new TestCaseData("https://github.com/mika-f/UdonRabbit/blob/main/Assets/Mochizuki/VRChat/Kitsune/Tests/DataPacker32x3Test.cs#L45", "https:", "#L45", 0, "/mika-f/UdonRabbit/blob/main/Assets/Mochizuki/VRChat/Kitsune/Tests/DataPacker32x3Test.cs",
+                                 "/mika-f/UdonRabbit/blob/main/Assets/Mochizuki/VRChat/Kitsune/Tests/DataPacker32x3Test.cs", "", "github.com", 0).Returns(null)
             };
         }
 

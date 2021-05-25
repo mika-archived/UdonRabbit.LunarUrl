@@ -9,6 +9,13 @@ URL parser for VRChat Udon and UdonSharp
 
 ## Usage
 
+You have to copy and paste the following files:
+
+- `Assets/NatsunekoLaboratory/UdonRabbit/LunarUrl/SimpleDictionary.cs`
+- `Assets/NatsunekoLaboratory/UdonRabbit/LunarUrl/UrlParser.cs`
+
+and write code like below example:
+
 ```csharp
 [SerializeField]
 private VRCUrlInputField _input;

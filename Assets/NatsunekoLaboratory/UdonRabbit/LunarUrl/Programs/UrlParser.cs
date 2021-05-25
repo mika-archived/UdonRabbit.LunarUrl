@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*-------------------------------------------------------------------------------------------
+ * Copyright (c) Natsuneko. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for license information.
+ *------------------------------------------------------------------------------------------*/
+using System;
 
 using UdonSharp;
 
@@ -8,6 +12,7 @@ using VRC.SDKBase;
 
 namespace UdonRabbit.LunarUrl
 {
+    [UdonBehaviourSyncMode(BehaviourSyncMode.NoVariableSync)]
     public class UrlParser : UdonSharpBehaviour
     {
         #region Injection
@@ -135,14 +140,14 @@ namespace UdonRabbit.LunarUrl
 
                 foreach (var parameter in keyValuePair)
                 {
-                    if (parameter == "")
+                    if (string.IsNullOrWhiteSpace(parameter))
                         continue;
 
                     var arr = parameter.Replace("+", " ").Split('=');
                     var key = arr[0];
 
                     arr[0] = "";
-                    var value = string.Join("", arr);
+                    var value = string.Concat(arr);
 
                     if (_parameters.IsExists(key))
                     {

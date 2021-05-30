@@ -49,15 +49,15 @@ namespace UdonRabbit.LunarUrl
         {
             _parser.Parse(_field.GetUrl());
 
-            _scheme.text = $"Scheme : {_parser.GetScheme()}";
-            _hostname.text = $"Hostname : {_parser.GetHost()}";
-            _path.text = $"Path : {_parser.GetAbsolutePath()}";
-            _pathAndQuery.text = $"PathAndQuery : {_parser.GetPathAndQuery()}";
-            _userInfo.text = $"UserInfo : {_parser.GetUserInfo()}";
-            _port.text = $"Port : {_parser.GetPort()}";
-            _fragment.text = $"Fragment : {_parser.GetFragment()}";
+            _scheme.text = $"Scheme : {_parser.Scheme}";
+            _hostname.text = $"Hostname : {_parser.Host}";
+            _path.text = $"Path : {_parser.AbsolutePath}";
+            _pathAndQuery.text = $"PathAndQuery : {_parser.PathAndQuery}";
+            _userInfo.text = $"UserInfo : {_parser.User}";
+            _port.text = $"Port : {_parser.Port}";
+            _fragment.text = $"Fragment : {_parser.Fragment}";
 
-            var keys = _parser.GetQuery().GetKeys();
+            var keys = _parser.QueryDictionary.GetKeys();
 
             foreach (var t in _arguments)
                 t.text = "Key=Value";
@@ -68,7 +68,7 @@ namespace UdonRabbit.LunarUrl
                     break;
 
                 var key = keys[i];
-                var value = _parser.GetQuery().GetItem(key);
+                var value = _parser.QueryDictionary.GetItem(key);
 
                 if (value == null)
                     _arguments[i].text = $"{key}={null}";

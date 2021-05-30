@@ -2,6 +2,7 @@
  * Copyright (c) Natsuneko. All rights reserved.
  * Licensed under the MIT License. See LICENSE in the project root for license information.
  *------------------------------------------------------------------------------------------*/
+
 using System;
 
 using UdonSharp;
@@ -47,7 +48,7 @@ namespace UdonRabbit.LunarUrl
 
             if (chars.Length == 0)
             {
-                _scheme = sb;
+                Scheme = sb;
                 return url;
             }
 
@@ -103,7 +104,7 @@ namespace UdonRabbit.LunarUrl
                     break;
             }
 
-            _scheme = sb;
+            Scheme = sb;
 
             if (truncate > 0)
                 _hasHostname = true;
@@ -116,11 +117,11 @@ namespace UdonRabbit.LunarUrl
             var index = url.IndexOf("#", StringComparison.Ordinal);
             if (index >= 0)
             {
-                _fragment = url.Substring(index);
+                Fragment = url.Substring(index);
                 return url.Substring(0, index);
             }
 
-            _fragment = string.Empty;
+            Fragment = string.Empty;
             return url;
         }
 
@@ -135,8 +136,8 @@ namespace UdonRabbit.LunarUrl
 
                 var keyValuePair = parameters.Split('&');
 
-                _query = parameters;
-                _parameters.Initialize((uint) keyValuePair.Length);
+                Query = parameters;
+                QueryDictionary.Initialize((uint) keyValuePair.Length);
 
                 foreach (var parameter in keyValuePair)
                 {
@@ -149,9 +150,9 @@ namespace UdonRabbit.LunarUrl
                     arr[0] = "";
                     var value = string.Concat(arr);
 
-                    if (_parameters.IsExists(key))
+                    if (QueryDictionary.IsExists(key))
                     {
-                        var item = _parameters.GetItem(key);
+                        var item = QueryDictionary.GetItem(key);
                         if (item.GetType() == typeof(string[]))
                         {
                             var items = (string[]) item;
@@ -160,7 +161,7 @@ namespace UdonRabbit.LunarUrl
                                 newItems[i] = items[i];
                             newItems[items.Length] = value;
 
-                            _parameters.UpdateItem(key, newItems);
+                            QueryDictionary.UpdateItem(key, newItems);
                         }
                         else
                         {
@@ -168,19 +169,19 @@ namespace UdonRabbit.LunarUrl
                             items[0] = (string) item;
                             items[1] = value;
 
-                            _parameters.UpdateItem(key, items);
+                            QueryDictionary.UpdateItem(key, items);
                         }
                     }
                     else
                     {
-                        _parameters.AddItem(key, value);
+                        QueryDictionary.AddItem(key, value);
                     }
                 }
 
                 return url.Substring(0, index);
             }
 
-            _query = "";
+            Query = "";
             return url;
         }
 
@@ -191,15 +192,15 @@ namespace UdonRabbit.LunarUrl
                 var index = url.IndexOf("/", StringComparison.Ordinal);
                 if (index >= 0)
                 {
-                    _path = url.Substring(index);
+                    AbsolutePath = url.Substring(index);
                     return url.Substring(0, index);
                 }
 
-                _path = "";
+                AbsolutePath = "";
                 return url;
             }
 
-            _path = url;
+            AbsolutePath = url;
             return "";
         }
 
@@ -208,11 +209,11 @@ namespace UdonRabbit.LunarUrl
             var index = url.IndexOf("@", StringComparison.Ordinal);
             if (index >= 0)
             {
-                _user = url.Substring(0, index);
+                User = url.Substring(0, index);
                 return url.Substring(index + "@".Length);
             }
 
-            _user = "";
+            User = "";
             return url;
         }
 
@@ -222,7 +223,7 @@ namespace UdonRabbit.LunarUrl
             if (url.StartsWith("["))
             {
                 var index = url.IndexOf("]", StringComparison.Ordinal);
-                _host = url.Substring(0, index + 1).ToLowerInvariant();
+                Host = url.Substring(0, index + 1).ToLowerInvariant();
                 return url.Substring(index + "]".Length);
             }
             else
@@ -230,23 +231,23 @@ namespace UdonRabbit.LunarUrl
                 var index = url.IndexOf(":", StringComparison.Ordinal);
                 if (index >= 0)
                 {
-                    _host = url.Substring(0, index).ToLowerInvariant();
+                    Host = url.Substring(0, index).ToLowerInvariant();
                     return url.Substring(index + ":".Length);
                 }
 
-                _host = url.ToLowerInvariant();
+                Host = url.ToLowerInvariant();
                 return "";
             }
         }
 
-        private void ParsePortNumber(string url)
+        internal void ParsePortNumber(string url)
         {
             if (url.StartsWith(":"))
                 url = url.Substring(1);
 
             var port = 0;
             if (int.TryParse(url, out port))
-                _port = port;
+                Port = port;
         }
 
 #if !COMPILER_UDONSHARP
@@ -260,60 +261,28 @@ namespace UdonRabbit.LunarUrl
 
         #region Private Variables
 
-        private string _fragment;
-        private string _host;
-        private string _path;
-        private int _port;
-        private string _query;
-        private string _scheme;
-        private string _user;
         private bool _hasHostname;
 
-        #endregion
+        public string Fragment { get; private set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Query { get; private set; }
+        public string Scheme { get; private set; }
+        public string User { get; private set; }
 
-        #region Properties
-
-        public string GetAbsolutePath()
+        public string PathAndQuery
         {
-            return _path;
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Query))
+                    return $"{AbsolutePath}";
+                return $"{AbsolutePath}?{Query}";
+            }
         }
 
-        public string GetFragment()
-        {
-            return _fragment;
-        }
+        public string AbsolutePath { get; private set; }
 
-        public string GetHost()
-        {
-            return _host;
-        }
-
-        public string GetPathAndQuery()
-        {
-            if (string.IsNullOrWhiteSpace(_query))
-                return $"{_path}";
-            return $"{_path}?{_query}";
-        }
-
-        public int GetPort()
-        {
-            return _port;
-        }
-
-        public SimpleDictionary GetQuery()
-        {
-            return _parameters;
-        }
-
-        public string GetScheme()
-        {
-            return _scheme;
-        }
-
-        public string GetUserInfo()
-        {
-            return _user;
-        }
+        public SimpleDictionary QueryDictionary => _parameters;
 
         #endregion
     }

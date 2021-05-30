@@ -66,14 +66,14 @@ namespace UdonRabbit.LunarUrl.Tests
 
             parser.Parse(new VRCUrl(url));
 
-            Assert.AreEqual(parser.GetScheme(), scheme);
-            Assert.AreEqual(parser.GetFragment(), fragment);
-            Assert.AreEqual(parser.GetQuery().GetCount(), (uint) size);
-            Assert.AreEqual(parser.GetAbsolutePath(), path);
-            Assert.AreEqual(parser.GetPathAndQuery(), pathAndQuery);
-            Assert.AreEqual(parser.GetUserInfo(), userInfo);
-            Assert.AreEqual(parser.GetHost(), hostname);
-            Assert.AreEqual(parser.GetPort(), port);
+            Assert.AreEqual(parser.Scheme, scheme);
+            Assert.AreEqual(parser.Fragment, fragment);
+            Assert.AreEqual(parser.QueryDictionary.GetCount(), (uint) size);
+            Assert.AreEqual(parser.AbsolutePath, path);
+            Assert.AreEqual(parser.PathAndQuery, pathAndQuery);
+            Assert.AreEqual(parser.User, userInfo);
+            Assert.AreEqual(parser.Host, hostname);
+            Assert.AreEqual(parser.Port, port);
         }
     }
 }
